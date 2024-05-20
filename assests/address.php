@@ -3,13 +3,13 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "serenio";
+$dbname = "parane1";
 
 /*
 $servername = "localhost";
-$dbname = "u593341949_db_serenio";
-$username = "u593341949_dev_serenio";
-$password = "20212014Serenio";
+$dbname = "u593341949_db_parane";
+$username = "u593341949_dev_parane";
+$password = "20212088Parane";
 */
 
 try {
