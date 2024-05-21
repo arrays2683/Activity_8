@@ -7,21 +7,69 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
             padding: 20px;
-            width: 80%;
+            max-width: 1200px;
             margin: 0 auto;
         }
         .card {
-            width: 100%;
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
         }
         .card-img-top {
             width: 100%;
-            height: auto;
+            height: 200px;
             object-fit: cover;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .card-body {
+            padding: 15px;
+            background-color: #fff;
+        }
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .card-text {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .btn-success {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .modal-header {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .modal-title {
+            font-size: 1.25rem;
+        }
+        .modal-footer .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+        .modal-footer .btn-success {
+            background-color: #28a745;
+            color: #fff;
         }
     </style>
 </head>
@@ -83,7 +131,7 @@
                 const productsContainer = document.getElementById('productsDisplay');
                 data.forEach(product => {
                     const cardHTML = `
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <img class="card-img-top" src="${product.img}" alt="${product.title}">
                             <div class="card-body">
                                 <h5 class="card-title">${product.title}</h5><br>Price: ₱${product.rrp}<br>
