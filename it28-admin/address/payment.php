@@ -6,18 +6,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $price = $_POST['price'];
     $payment_method = $_POST['payment_method'];
 
-    try {
-        $stmt = $pdo->prepare("INSERT INTO payments (product_name, price, payment_method) VALUES (:product_name, :price, :payment_method)");
-        $stmt->execute([
-            ':product_name' => $product_name,
-            ':price' => $price,
-            ':payment_method' => $payment_method
-        ]);
+    if (empty($product_name) || empty($price) || empty($payment_method)) {
+        $error_message = 'All fields are required.';
+    } else {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO payments (product_name, price, payment_method) VALUES (:product_name, :price, :payment_method)");
+            $stmt->execute([
+                ':product_name' => $product_name,
+                ':price' => $price,
+                ':payment_method' => $payment_method
+            ]);
 
-        $success_message = "Payment successful!";
-    } catch (PDOException $e) {
-        $error_message = 'Error: ' . $e->getMessage();
-    }   
+            $success_message = "Payment successful!";
+            // Redirect to address.php after successful submission
+            header("Location: address.php");
+            exit; // Stop further execution after redirection
+        } catch (PDOException $e) {
+            $error_message = 'Error: ' . $e->getMessage();
+        }
+    }
 }
 ?>
 
@@ -43,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         <?php endif; ?>
 
-        <form action="" method="POST">
+        <form id="paymentForm" action="" method="POST">
             <div class="form-group">
                 <label for="product">Product</label>
                 <input type="text" class="form-control" id="product" name="product" value="<?php echo htmlspecialchars($_GET['product'] ?? ''); ?>" readonly>
@@ -61,14 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <option value="Credit Card">Credit Card</option>
                 </select>
             </div>
-            <a href="address.php" onclick="document.getElementById('paymentForm').submit();" class="btn btn-primary">Submit Payment</a>
-            <input type="submit" style="display:none"> <!-- Hide the original submit button -->
+            <button type="submit" class="btn btn-primary">Submit Payment</button>
         </form>
     </div>
-
-    <script>
-        // Trigger change event to set initial values
-        document.getElementById('product').dispatchEvent(new Event('change'));
-    </script>
 </body>
 </html>
