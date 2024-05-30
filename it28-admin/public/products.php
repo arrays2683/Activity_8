@@ -1,14 +1,14 @@
 <?php
 // Initialize the session
 session_start();
- 
+
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: ../index.php");
     exit;
 }
 ?>
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +21,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         body{ font: 14px sans-serif; text-align: center; }
-     
+
         table tr td:last-child{
             width: 120px;
         }
@@ -106,7 +106,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                         // Define the row template
                         $rowTemplate = '
                             <tr>
-                                <td>{{id}}</td>
+                                <td>{{product_id}}</td>
                                 <td>{{title}}</td>
                                 <td>{{description}}</td>
                                 <td>{{price}}</td>
@@ -126,8 +126,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                         $rows = '';
                         while ($row = $result->fetch()) {
                             $rowHtml = str_replace(
-                                array('{{id}}', '{{title}}', '{{description}}', '{{price}}', '{{rrp}}', '{{quantity}}', '{{img}}', '{{date_added}}'),
-                                array($row['id'], $row['title'], $row['description'], $row['price'], $row['rrp'], $row['quantity'], $row['img'], $row['date_added']),
+                                array('{{product_id}}', '{{title}}', '{{description}}', '{{price}}', '{{rrp}}', '{{quantity}}', '{{img}}', '{{date_added}}'),
+                                array($row['product_id'], $row['title'], $row['description'], $row['price'], $row['rrp'], $row['quantity'], $row['img'], $row['date_added']),
                                 $rowTemplate
                             );
                             $rows .= $rowHtml;

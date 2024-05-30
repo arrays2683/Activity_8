@@ -9,6 +9,6 @@ $_SESSION = array();
 session_destroy();
  
 // Redirect to login page
-header("Location: /parane1/it28-admin/index.php");
+header("Location: /Activity8/it28-admin/index.php");
 exit;
 ?>
