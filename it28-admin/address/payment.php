@@ -10,17 +10,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error_message = 'All fields are required.';
     } else {
         try {
-            $stmt = $pdo->prepare("INSERT INTO payments (product_name, price, payment_method) VALUES (:product_name, :price, :payment_method)");
-            $stmt->execute([
-                ':product_name' => $product_name,
-                ':price' => $price,
-                ':payment_method' => $payment_method
-            ]);
+            // Fetch the product_id from the products table
+            $stmt = $pdo->prepare("SELECT id FROM products WHERE product_name = :product_name");
+            $stmt->execute([':product_name' => $product_name]);
+            $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $success_message = "Payment successful!";
-            // Redirect to address.php after successful submission
-            header("Location: address.php");
-            exit; // Stop further execution after redirection
+            if ($product) {
+                $product_id = $product['id'];
+
+                // Insert into payments table with product_id
+                $stmt = $pdo->prepare("INSERT INTO payments (product_id, product_name, price, payment_method) VALUES (:product_id, :product_name, :price, :payment_method)");
+                $stmt->execute([
+                    ':product_id' => $product_id,
+                    ':product_name' => $product_name,
+                    ':price' => $price,
+                    ':payment_method' => $payment_method
+                ]);
+
+                $success_message = "Payment successful!";
+                // Redirect to address.php after successful submission
+                header("Location: address.php");
+                exit; // Stop further execution after redirection
+            } else {
+                $error_message = 'Product not found.';
+            }
         } catch (PDOException $e) {
             $error_message = 'Error: ' . $e->getMessage();
         }

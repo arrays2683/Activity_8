@@ -137,6 +137,7 @@
                         <div class="card">
                             <img class="card-img-top" src="${product.img}" alt="${product.title}">
                             <div class="card-body">
+                                <p>${product.product_id}</p>
                                 <h5 class="card-title">${product.title}</h5><br>Price: ₱${product.rrp}<br>
                                 <p class="card-text">${product.description}</p>
                                 <p class="card-text">Quantity: ${product.quantity}</p>
@@ -163,6 +164,7 @@
         }
 
         function showModal(productId, productTitle, productPrice) {
+            document.getElementById('modalProductTitle').innerText = `Product: ${productId}`;
             document.getElementById('modalProductTitle').innerText = `Product: ${productTitle}`;
             document.getElementById('modalProductPrice').innerText = `Price: ₱${productPrice}`;
             document.getElementById('quantityInput').value = 1;
@@ -171,7 +173,7 @@
             const buyNowButton = document.getElementById('buyNowButton');
             const quantity = document.getElementById('quantityInput').value;
             const totalPrice = productPrice * quantity;
-            const href = `it28-admin/address/payment.php?product=${encodeURIComponent(productTitle)}&total=${totalPrice}`;
+            const href = `it28-admin/address/payment.php?product=${encodeURIComponent(productId)}&total=${totalPrice}`;
             buyNowButton.setAttribute('href', href);
 
             $('#cartModal').modal('show');
