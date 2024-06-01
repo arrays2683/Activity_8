@@ -1,51 +1,49 @@
 <?php
 // Check existence of id parameter before processing further
-if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
+if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
     // Include config file
     require_once '../../db/config.php';
 
-    
     // Prepare a select statement
-    $sql = "SELECT * FROM products WHERE id = :id";
-    
-    if($stmt = $pdo->prepare($sql)){
+    $sql = "SELECT * FROM products WHERE product_id = :id"; // Use the correct column name
+
+    if ($stmt = $pdo->prepare($sql)) {
         // Bind variables to the prepared statement as parameters
         $stmt->bindParam(":id", $param_id);
-        
+
         // Set parameters
         $param_id = trim($_GET["id"]);
-        
+
         // Attempt to execute the prepared statement
-        if($stmt->execute()){
-            if($stmt->rowCount() == 1){
+        if ($stmt->execute()) {
+            if ($stmt->rowCount() == 1) {
                 // Fetch result row as an associative array
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                
+
                 // Retrieve individual field values
-                $product_name = $row["title"];
+                $product_name = $row["product_name"];
                 $product_details = $row["description"];
                 $product_price = $row["price"];
                 $product_rrp = $row["rrp"];
                 $product_quantity = $row["quantity"];
                 $product_img = $row["img"];
                 $date_added = $row["date_added"];
-            } else{
+            } else {
                 // URL doesn't contain valid id parameter. Redirect to error page
                 header("location: ../public/error.php");
                 exit();
             }
-            
-        } else{
+        } else {
             echo "Oops! Something went wrong. Please try again later.";
         }
     }
-     
+
     // Close statement
     unset($stmt);
-    
+
     // Close connection
     unset($pdo);
-} else{
+} else {
     // URL doesn't contain id parameter. Redirect to error page
     header("location: ../public/error.php");
     exit();
@@ -59,7 +57,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     <title>View Record</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .wrapper{
+        .wrapper {
             width: 600px;
             margin: 0 auto;
         }

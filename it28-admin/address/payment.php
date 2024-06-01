@@ -4,9 +4,10 @@ include 'config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product_name = $_POST['product'];
     $price = $_POST['price'];
+    $quantity = $_POST['quantity'];
     $payment_method = $_POST['payment_method'];
 
-    if (empty($product_name) || empty($price) || empty($payment_method)) {
+    if (empty($product_name) || empty($price) || empty($quantity) || empty($payment_method)) {
         $error_message = 'All fields are required.';
     } else {
         try {
@@ -17,13 +18,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if ($product) {
                 $product_id = $product['id'];
+                $total_price = $price * $quantity;
 
-                // Insert into payments table with product_id
-                $stmt = $pdo->prepare("INSERT INTO payments (product_id, product_name, price, payment_method) VALUES (:product_id, :product_name, :price, :payment_method)");
+                // Insert into payments table with product_id and quantity
+                $stmt = $pdo->prepare("INSERT INTO payments (product_id, product_name, price, quantity, payment_method) VALUES (:product_id, :product_name, :price, :quantity, :payment_method)");
                 $stmt->execute([
                     ':product_id' => $product_id,
                     ':product_name' => $product_name,
-                    ':price' => $price,
+                    ':price' => $total_price,
+                    ':quantity' => $quantity,
                     ':payment_method' => $payment_method
                 ]);
 
@@ -70,7 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="form-group">
                 <label for="price">Price</label>
-                <input type="text" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars($_GET['total'] ?? ''); ?>" readonly>
+                <input type="text" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars($_GET['price'] ?? ''); ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" value="<?php echo htmlspecialchars($_GET['quantity'] ?? '1'); ?>" readonly>
             </div>
             <div class="form-group">
                 <label for="payment_method">Payment Method</label>
