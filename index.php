@@ -110,7 +110,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                <p id="modalProductId"></p>
+                    <p id="modalProductId"></p>
                     <p id="modalProductName"></p>
                     <p id="modalProductPrice"></p>
                     <label for="quantityInput">Quantity:</label>
@@ -139,7 +139,7 @@
                         <img class="card-img-top" src="${product.img}" alt="${product.product_name}">
                         <div class="card-body">
                             <p>${product.product_id}</p>
-                            <h5 class="card-title">${product.title}</h5><br>Price: ₱${product.rrp}<br>
+                            <h5 class="card-title">${product.product_name}</h5><br>Price: ₱${product.rrp}<br>
                             <p class="card-text">${product.description}</p>
                             <p class="card-text">Quantity: ${product.quantity}</p>
                             <button class="btn btn-success" onclick="addToCart(${product.product_id}, '${product.product_name}', ${product.rrp})">
@@ -155,13 +155,13 @@
 
     let cart = {};
 
-    function addToCart(productId, productProductName, productPrice) {
+    function addToCart(productId, productProduct_Name, productPrice) {
         if (cart[productId]) {
             cart[productId]++;
         } else {
             cart[productId] = 1;
         }
-        showModal(productId, productTitle, productPrice);
+        showModal(productId, productProduct_Name, productPrice);
     }
 
     function showModal(productId, productProduct_Name, productPrice) {

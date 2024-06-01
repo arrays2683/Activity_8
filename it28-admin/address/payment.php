@@ -64,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form id="paymentForm" action="" method="P">
             <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
             <div class="form-group">
-                <label for="product">Product</label>
-                <input type="text" class="form-control" id="product" name="product" value="<?php echo htmlspecialchars($product_name); ?>" readonly>
+                <label for="product">Product Name</label>
+                <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo htmlspecialchars($product_name); ?>" readonly>
             </div>
             <div class="form-group">
                 <label for="price">Price</label>

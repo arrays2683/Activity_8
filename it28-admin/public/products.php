@@ -107,7 +107,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                         $rowTemplate = '
                             <tr>
                                 <td>{{product_id}}</td>
-                                <td>{{title}}</td>
+                                <td>{{product_name}}</td>
                                 <td>{{description}}</td>
                                 <td>{{price}}</td>
                                 <td>{{rrp}}</td>
