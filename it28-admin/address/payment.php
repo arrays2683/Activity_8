@@ -1,46 +1,41 @@
 <?php
 include 'config.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $product_name = $_POST['product'];
-    $price = $_POST['price'];
-    $quantity = $_POST['quantity'];
-    $payment_method = $_POST['payment_method'];
+// Initialize variables for product details and total price
+$product_name = '';
+$price = '';
+$quantity = 1; // Default quantity
+$total_price = '';
+$error_message = '';
+$success_message = '';
 
-    if (empty($product_name) || empty($price) || empty($quantity) || empty($payment_method)) {
-        $error_message = 'All fields are required.';
-    } else {
-        try {
-            // Fetch the product_id from the products table
-            $stmt = $pdo->prepare("SELECT id FROM products WHERE product_name = :product_name");
-            $stmt->execute([':product_name' => $product_name]);
-            $product = $stmt->fetch(PDO::FETCH_ASSOC);
+// Check if product_id is provided via GET and fetch product details
+if (isset($_GET['product_id'])) {
+    $product_id = $_GET['product_id'];
+    try {
+        $stmt = $pdo->prepare("SELECT product_name, price FROM products WHERE product_id = :product_id");
+        $stmt->execute([':product_id' => $product_id]);
+        $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($product) {
-                $product_id = $product['id'];
-                $total_price = $price * $quantity;
-
-                // Insert into payments table with product_id and quantity
-                $stmt = $pdo->prepare("INSERT INTO payments (product_id, product_name, price, quantity, payment_method) VALUES (:product_id, :product_name, :price, :quantity, :payment_method)");
-                $stmt->execute([
-                    ':product_id' => $product_id,
-                    ':product_name' => $product_name,
-                    ':price' => $total_price,
-                    ':quantity' => $quantity,
-                    ':payment_method' => $payment_method
-                ]);
-
-                $success_message = "Payment successful!";
-                // Redirect to address.php after successful submission
-                header("Location: address.php");
-                exit; // Stop further execution after redirection
-            } else {
-                $error_message = 'Product not found.';
-            }
-        } catch (PDOException $e) {
-            $error_message = 'Error: ' . $e->getMessage();
+        if ($product) {
+            $product_name = $product['product_name'];
+            $price = $product['price'];
+            $quantity = isset($_GET['quantity']) ? (int)$_GET['quantity'] : 1;
+            $total_price = $price * $quantity;
+        } else {
+            $error_message = 'Product not found.';
         }
+    } catch (PDOException $e) {
+        $error_message = 'Error: ' . $e->getMessage();
     }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // ... [Your existing form handling code]
+
+    // After successful payment, redirect to address.php or another appropriate page
+    header("Location: address.php");
+    exit;
 }
 ?>
 
@@ -66,18 +61,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         <?php endif; ?>
 
-        <form id="paymentForm" action="" method="POST">
+        <form id="paymentForm" action="" method="P">
+            <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
             <div class="form-group">
                 <label for="product">Product</label>
-                <input type="text" class="form-control" id="product" name="product" value="<?php echo htmlspecialchars($_GET['product'] ?? ''); ?>" readonly>
+                <input type="text" class="form-control" id="product" name="product" value="<?php echo htmlspecialchars($product_name); ?>" readonly>
             </div>
             <div class="form-group">
                 <label for="price">Price</label>
-                <input type="text" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars($_GET['price'] ?? ''); ?>" readonly>
+                <input type="text" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars($price); ?>" readonly>
             </div>
             <div class="form-group">
                 <label for="quantity">Quantity</label>
-                <input type="number" class="form-control" id="quantity" name="quantity" value="<?php echo htmlspecialchars($_GET['quantity'] ?? '1'); ?>" readonly>
+                <input type="number" class="form-control" id="quantity" name="quantity" value="<?php echo htmlspecialchars($quantity); ?>" min="1">
+            </div>
+            <div class="form-group">
+                <label for="total_price">Total Price</label>
+                <input type="text" class="form-control" id="total_price" name="total_price" value="<?php echo htmlspecialchars($total_price); ?>" readonly>
             </div>
             <div class="form-group">
                 <label for="payment_method">Payment Method</label>

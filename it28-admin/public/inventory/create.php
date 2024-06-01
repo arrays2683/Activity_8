@@ -3,17 +3,17 @@
 require_once '../../db/config.php';
 
 // Define variables and initialize with empty values
-$title = $description = $price = $rrp = $quantity = $img = "";
-$title_err = $description_err = $price_err = $rrp_err = $quantity_err = $img_err = "";
+$product_name = $description = $price = $rrp = $quantity = $img = "";
+$product_name_err = $description_err = $price_err = $rrp_err = $quantity_err = $img_err = "";
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validate title
-    $input_title = trim($_POST["title"]);
-    if (empty($input_title)) {
-        $title_err = "Please enter a title.";
+    // Validate product_name
+    $input_product_name = trim($_POST["product_name"]);
+    if (empty($input_product_name)) {
+        $product_name_err = "Please enter a product_name.";
     } else {
-        $title = $input_title;
+        $product_name = $input_product_name;
     }
 
     // Validate description
@@ -61,13 +61,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Check input errors before inserting in database
-    if (empty($title_err) && empty($description_err) && empty($price_err) && empty($rrp_err) && empty($quantity_err) && empty($img_err)) {
+    if (empty($product_name_err) && empty($description_err) && empty($price_err) && empty($rrp_err) && empty($quantity_err) && empty($img_err)) {
         // Prepare an insert statement
-        $sql = "INSERT INTO products (title, description, price, rrp, quantity, img) VALUES (:title, :description, :price, :rrp, :quantity, :img)";
+        $sql = "INSERT INTO products (product_name, description, price, rrp, quantity, img) VALUES (:title, :description, :price, :rrp, :quantity, :img)";
 
         if ($stmt = $pdo->prepare($sql)) {
             // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":title", $title);
+            $stmt->bindParam(":product_name", $product_name);
             $stmt->bindParam(":description", $description);
             $stmt->bindParam(":price", $price);
             $stmt->bindParam(":rrp", $rrp);
@@ -115,9 +115,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p>Please fill this form and submit to add a new product to the database.</p>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" name="title" class="form-control <?php echo (!empty($title_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $title; ?>">
-                        <span class="invalid-feedback"><?php echo $title_err; ?></span>
+                        <label>Product Name</label>
+                        <input type="text" name="product_name" class="form-control <?php echo (!empty($product_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_name; ?>">
+                        <span class="invalid-feedback"><?php echo $product_name_err; ?></span>
                     </div>
                     <div class="form-group">
                         <label>Description</label>

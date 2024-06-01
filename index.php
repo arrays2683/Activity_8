@@ -111,7 +111,7 @@
                 </div>
                 <div class="modal-body">
                 <p id="modalProductId"></p>
-                    <p id="modalProductTitle"></p>
+                    <p id="modalProductName"></p>
                     <p id="modalProductPrice"></p>
                     <label for="quantityInput">Quantity:</label>
                     <input type="number" id="quantityInput" value="1" min="1">
@@ -136,13 +136,13 @@
             data.forEach(product => {
                 const cardHTML = `
                     <div class="card">
-                        <img class="card-img-top" src="${product.img}" alt="${product.title}">
+                        <img class="card-img-top" src="${product.img}" alt="${product.product_name}">
                         <div class="card-body">
                             <p>${product.product_id}</p>
                             <h5 class="card-title">${product.title}</h5><br>Price: ₱${product.rrp}<br>
                             <p class="card-text">${product.description}</p>
                             <p class="card-text">Quantity: ${product.quantity}</p>
-                            <button class="btn btn-success" onclick="addToCart(${product.product_id}, '${product.title}', ${product.rrp})">
+                            <button class="btn btn-success" onclick="addToCart(${product.product_id}, '${product.product_name}', ${product.rrp})">
                                 <i class="fas fa-cart-plus"></i> Add to Cart
                             </button>
                         </div>
@@ -155,7 +155,7 @@
 
     let cart = {};
 
-    function addToCart(productId, productTitle, productPrice) {
+    function addToCart(productId, productProductName, productPrice) {
         if (cart[productId]) {
             cart[productId]++;
         } else {
@@ -164,9 +164,9 @@
         showModal(productId, productTitle, productPrice);
     }
 
-    function showModal(productId, productTitle, productPrice) {
+    function showModal(productId, productProduct_Name, productPrice) {
         document.getElementById('modalProductId').innerText = `Product ID: ${productId}`;
-        document.getElementById('modalProductTitle').innerText = `Product: ${productTitle}`;
+        document.getElementById('modalProductProduct_Name').innerText = `Product_Name: ${productProduct_Name}`;
         document.getElementById('modalProductPrice').innerText = `Price: ₱${productPrice}`;
         document.getElementById('quantityInput').value = 1;
         updateTotalPrice(productPrice);

@@ -3,17 +3,17 @@
 require_once '../../db/config.php';
  
 // Define variables and initialize with empty values
-$title = $description = $price = $rrp = $quantity = $img = "";
-$title_err = $description_err = $price_err = $rrp_err = $quantity_err = $img_err = "";
+$product_id = $product_name = $description = $price = $rrp = $quantity = $img = "";
+$product_id_err = $product_name_err = $description_err = $price_err = $rrp_err = $quantity_err = $img_err = "";
    // Prepare a select statement
-   $sql = "SELECT * FROM products WHERE id = :id";
+   $sql = "SELECT * FROM products WHERE product_id = :product_id";
     
    if($stmt = $pdo->prepare($sql)){
        // Bind variables to the prepared statement as parameters
-       $stmt->bindParam(":id", $param_id);
+       $stmt->bindParam(":product_id", $param_product_id);
        
        // Set parameters
-       $param_id = trim($_GET["id"]);
+       $param_product_id = trim($_GET["product_id"]);
        
        // Attempt to execute the prepared statement
        if($stmt->execute()){
@@ -23,7 +23,8 @@ $title_err = $description_err = $price_err = $rrp_err = $quantity_err = $img_err
                $row = $stmt->fetch(PDO::FETCH_ASSOC);
            
                // Retrieve individual field values
-               $title = $row["title"];
+               $product_id = $row["product_id"];
+               $product_name = $row["product_name"];
                $description = $row["description"];
                $price = $row["price"];
                $rrp = $row["rrp"];
@@ -42,12 +43,20 @@ $title_err = $description_err = $price_err = $rrp_err = $quantity_err = $img_err
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    // Validate title
-    $input_title = trim($_POST["title"]);
-    if(empty($input_title)){
-        $title_err = "Please enter a title.";
+    // Validate product_id
+    $input_product_id = trim($_POST["product_id"]);
+    if(empty($input_product_name)){
+        $product_id_err = "Please enter a product_id.";
     } else{
-        $title = $input_title;
+        $product_id = $input_product_id;
+    }
+    
+    // Validate product_name
+    $input_product_name = trim($_POST["product_name"]);
+    if(empty($input_product_name)){
+        $product_name_err = "Please enter a product_name.";
+    } else{
+        $product_name = $input_product_name;
     }
     
     // Validate description
@@ -97,22 +106,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
     
    // Check input errors before updating in database
-    if (empty($title_err) && empty($description_err) && empty($price_err) && empty($rrp_err) && empty($quantity_err) && empty($img_err)) {
+    if (empty($product_id_err) && empty($product_name_err) && empty($description_err) && empty($price_err) && empty($rrp_err) && empty($quantity_err) && empty($img_err)) {
     // Prepare an update statement
-    $sql = "UPDATE products SET title = :title, description = :description, price = :price, rrp = :rrp, quantity = :quantity, img = :img WHERE id = :id";
+    $sql = "UPDATE products SET product_name = :product_name, description = :description, price = :price, rrp = :rrp, quantity = :quantity, img = :img WHERE id = :id";
 
     if ($stmt = $pdo->prepare($sql)) {
         // Bind variables to the prepared statement as parameters
-        $stmt->bindParam(":title", $title);
+        $stmt->bindParam(":product_id", $product_id);
+        $stmt->bindParam(":product_name", $product_name);
         $stmt->bindParam(":description", $description);
         $stmt->bindParam(":price", $price);
         $stmt->bindParam(":rrp", $rrp);
         $stmt->bindParam(":quantity", $quantity);
         $stmt->bindParam(":img", $img);
-        $stmt->bindParam(":id", $id); // Add parameter for the product ID
+        $stmt->bindParam(":product_id", $id); // Add parameter for the product ID
 
         // Set the product ID
-        $id = $_POST["id"]; // Assuming you have a hidden input field named "id" in your form
+        $product_id = $_POST["product_id"]; // Assuming you have a hidden input field named "product_id" in your form
 
         // Attempt to execute the prepared statement
         if ($stmt->execute()) {
@@ -157,9 +167,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <p>Please edit the input values and submit to update the product record.</p>
                     <form action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" method="post">
                         <div class="form-group">
-                            <label>Title</label>
-                            <input type="text" name="title" class="form-control <?php echo (!empty($title_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $title; ?>">
-                            <span class="invalid-feedback"><?php echo $title_err;?></span>
+                            <label>Product Name</label>
+                            <input type="text" name="product_name" class="form-control <?php echo (!empty($product_name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $product_name; ?>">
+                            <span class="invalid-feedback"><?php echo $product_name_err;?></span>
                         </div>
                         <div class="form-group">
                             <label>Description</label>

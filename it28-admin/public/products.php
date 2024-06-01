@@ -115,9 +115,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                 <td>{{img}}</td>
                                 <td>{{date_added}}</td>
                                 <td>
-                                    <a href="./inventory/read.php?id={{id}}" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>
-                                    <a href="./inventory/update.php?id={{id}}" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>
-                                    <a href="./inventory/delete.php?id={{id}}" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>
+                                    <a href="./inventory/read.php?product_id={{product_id}}" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>
+                                    <a href="./inventory/update.php?product_id={{product_id}}" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>
+                                    <a href="./inventory/delete.php?product_id={{product_id}}" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>
                                 </td>
                             </tr>
                         ';
@@ -126,8 +126,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                         $rows = '';
                         while ($row = $result->fetch()) {
                             $rowHtml = str_replace(
-                                array('{{product_id}}', '{{title}}', '{{description}}', '{{price}}', '{{rrp}}', '{{quantity}}', '{{img}}', '{{date_added}}'),
-                                array($row['product_id'], $row['title'], $row['description'], $row['price'], $row['rrp'], $row['quantity'], $row['img'], $row['date_added']),
+                                array('{{product_id}}', '{{product_name}}', '{{description}}', '{{price}}', '{{rrp}}', '{{quantity}}', '{{img}}', '{{date_added}}'),
+                                array($row['product_id'], $row['product_name'], $row['description'], $row['price'], $row['rrp'], $row['quantity'], $row['img'], $row['date_added']),
                                 $rowTemplate
                             );
                             $rows .= $rowHtml;
