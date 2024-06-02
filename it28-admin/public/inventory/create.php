@@ -61,12 +61,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Check input errors before inserting in database
-    if (empty($product_name_err) && empty($description_err) && empty($price_err) && empty($rrp_err) && empty($quantity_err) && empty($img_err)) {
+    if (empty($product_id_err) && empty($product_name_err) && empty($description_err) && empty($price_err) && empty($rrp_err) && empty($quantity_err) && empty($img_err)) {
         // Prepare an insert statement
-        $sql = "INSERT INTO products (product_name, description, price, rrp, quantity, img) VALUES (:title, :description, :price, :rrp, :quantity, :img)";
+        $sql = "INSERT INTO products (product_id, product_name, description, price, rrp, quantity, img) VALUES (:product_id, :product_name, :description, :price, :rrp, :quantity, :img)";
 
         if ($stmt = $pdo->prepare($sql)) {
             // Bind variables to the prepared statement as parameters
+            $stmt->bindParam(":product_id", $product_id);
             $stmt->bindParam(":product_name", $product_name);
             $stmt->bindParam(":description", $description);
             $stmt->bindParam(":price", $price);
@@ -77,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Attempt to execute the prepared statement
             if ($stmt->execute()) {
                 // Records created successfully. Redirect to landing page
-                header("location: ../index.php");
+                header("location: ../products.php");
                 exit();
             } else {
                 echo "Oops! Something went wrong. Please try again later.";

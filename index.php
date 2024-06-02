@@ -75,7 +75,7 @@
 </head>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">
-        <img src="it28-admin\images\Final Logo.png" width="50" height="50" class="d-inline-block align-top" alt="">
+        <img src="it28-admin/images/Final Logo.png" width="50" height="50" class="d-inline-block align-top" alt="">
         PARANE FOOD HUB
     </a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -155,27 +155,33 @@
 
     let cart = {};
 
-    function addToCart(productId, productProduct_Name, productPrice) {
+    function addToCart(productId, productName, productPrice) {
         if (cart[productId]) {
             cart[productId]++;
         } else {
             cart[productId] = 1;
         }
-        showModal(productId, productProduct_Name, productPrice);
+        showModal(productId, productName, productPrice);
     }
 
-    function showModal(productId, productProduct_Name, productPrice) {
+    function showModal(productId, productName, productPrice) {
         document.getElementById('modalProductId').innerText = `Product ID: ${productId}`;
-        document.getElementById('modalProductProduct_Name').innerText = `Product_Name: ${productProduct_Name}`;
+        document.getElementById('modalProductName').innerText = `Product Name: ${productName}`;
         document.getElementById('modalProductPrice').innerText = `Price: ₱${productPrice}`;
         document.getElementById('quantityInput').value = 1;
         updateTotalPrice(productPrice);
 
         const buyNowButton = document.getElementById('buyNowButton');
-        const quantity = document.getElementById('quantityInput').value;
-        const totalPrice = productPrice * quantity;
-        const href = `it28-admin/address/payment.php?product=${encodeURIComponent(productId)}&total=${totalPrice}`;
-        buyNowButton.setAttribute('href', href);
+        document.getElementById('quantityInput').addEventListener('input', function() {
+            updateTotalPrice(productPrice);
+        });
+
+        buyNowButton.onclick = function() {
+            const quantity = document.getElementById('quantityInput').value;
+            const totalPrice = productPrice * quantity;
+            const href = `it28-admin/address/payment.php?product_id=${productId}&product_name=${encodeURIComponent(productName)}&price=${productPrice}&quantity=${quantity}&total_price=${totalPrice}`;
+            window.location.href = href;
+        };
 
         $('#cartModal').modal('show');
     }
@@ -185,13 +191,7 @@
         const totalPrice = productPrice * quantity;
         document.getElementById('modalTotalPrice').innerText = `Total Price: ₱${totalPrice}`;
     }
-
-    // Listen for changes in quantity input
-    document.getElementById('quantityInput').addEventListener('input', function() {
-        const productPrice = parseFloat(document.getElementById('modalProductPrice').innerText.replace('Price: ₱', ''));
-        updateTotalPrice(productPrice);
-    });
-</script>
+    </script>
 
 </body>
 </html>

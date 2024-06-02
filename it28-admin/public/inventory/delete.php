@@ -63,7 +63,7 @@ if(isset($_POST["product_id"]) && !empty($_POST["product_id"])){
                             <p>Are you sure you want to delete this record?</p>
                             <p>
                                 <input type="submit" value="Yes" class="btn btn-danger">
-                                <a href="../index.php" class="btn btn-secondary ml-2">No</a>
+                                <a href="../products.php" class="btn btn-secondary ml-2">No</a>
                             </p>
                         </div>
                     </form>
