@@ -47,12 +47,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':product_id', $product_id);
 
         if ($stmt->execute()) {
-            $success_message = 'Payment recorded successfully.';
+            // Get the payment_id of the inserted payment
+            $payment_id = $pdo->lastInsertId();
+
+            // Redirect to address.php with payment_id parameter
+            header("Location: address.php?payment_id=" . $payment_id);
+            exit;
         } else {
             $error_message = 'Error recording payment. Please try again.';
             // Debug: Display error message
             echo "Error: " . $stmt->errorInfo()[2];
         }
+        
     } else {
         $error_message = 'Please select a payment method.';
     }
@@ -100,6 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="total_price">Total Price</label>
                 <input type="text" class="form-control" id="total_price" name="total_price" value="<?php echo htmlspecialchars($total_price); ?>" readonly>
             </div>
+            <!-- Add this hidden input field inside the form -->
+<input type="hidden" name="payment_id" value="<?php echo htmlspecialchars($payment_id); ?>">
+
             <div class="form-group">
                 <label for="payment_method">Payment Method</label>
                 <select class="form-control" id="payment_method" name="payment_method">
