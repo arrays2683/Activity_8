@@ -2,12 +2,19 @@
 // Include config file
 include 'config.php';
 
+// Retrieve the payment_id from the GET parameters
+$payment_id = isset($_GET['payment_id']) ? $_GET['payment_id'] : null;
+
 // Define variables and initialize with empty values
 $street = $city = $state = $zip = $country = '';
 $street_err = $city_err = $state_err = $zip_err = $country_err = '';
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve the payment_id from the form submission data
+$payment_id = isset($_POST['payment_id']) ? $_POST['payment_id'] : null;
+
+
     // Validate street address
     if (empty(trim($_POST["street"]))) {
         $street_err = "Please enter your street address.";

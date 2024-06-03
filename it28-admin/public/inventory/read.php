@@ -1,19 +1,18 @@
 <?php
-// Check existence of id parameter before processing further
-if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
+// Check existence of product_id parameter before processing further
+if(isset($_GET["product_id"]) && !empty(trim($_GET["product_id"]))){
     // Include config file
     require_once '../../db/config.php';
 
-    
     // Prepare a select statement
-    $sql = "SELECT * FROM products WHERE id = :id";
+    $sql = "SELECT * FROM products WHERE product_id = :product_id";
     
     if($stmt = $pdo->prepare($sql)){
         // Bind variables to the prepared statement as parameters
-        $stmt->bindParam(":id", $param_id);
+        $stmt->bindParam(":product_id", $param_product_id);
         
         // Set parameters
-        $param_id = trim($_GET["id"]);
+        $param_product_id = trim($_GET["product_id"]);
         
         // Attempt to execute the prepared statement
         if($stmt->execute()){
@@ -22,7 +21,8 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 
                 // Retrieve individual field values
-                $product_name = $row["title"];
+                $product_id = $row["product_id"];
+                $product_name = $row["product_name"];
                 $product_details = $row["description"];
                 $product_price = $row["price"];
                 $product_rrp = $row["rrp"];
@@ -30,7 +30,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 $product_img = $row["img"];
                 $date_added = $row["date_added"];
             } else{
-                // URL doesn't contain valid id parameter. Redirect to error page
+                // URL doesn't contain valid product_id parameter. Redirect to error page
                 header("location: ../public/error.php");
                 exit();
             }
@@ -46,7 +46,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     // Close connection
     unset($pdo);
 } else{
-    // URL doesn't contain id parameter. Redirect to error page
+    // URL doesn't contain product_id parameter. Redirect to error page
     header("location: ../public/error.php");
     exit();
 }
